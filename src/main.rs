@@ -84,8 +84,8 @@ impl Probabilities {
 #[derive(Debug)]
 struct Code {
     data: Vec<u8>,
-    write_index: i64,
-    read_index: i64,
+    write_index: usize,
+    read_index: usize,
     entropy: f32,
     chars: usize, //number of character encoded
 }
@@ -107,12 +107,12 @@ impl Code {
         Add bit to code
     */
     fn add_bit(&mut self, c: bool) {
-        let sector = (self.write_index % 8) as usize;
+        let sector = self.write_index % 8;
         if sector == 0 {
             self.data.push(0);
         }
         if c {
-            let block = (self.write_index / 8) as usize;
+            let block = self.write_index / 8;
             self.data[block] |= Self::BIN[sector]
         }
         self.write_index += 1;
@@ -129,7 +129,7 @@ impl Code {
         Read one bit and shift read_index
     */
     fn get_bit_and_shift(&mut self) -> bool {
-        if self.read_index < (self.data.len() * 8) as i64 {
+        if self.read_index < (self.data.len() * 8) {
             self.read_index += 1;
             return self.get_bit((self.read_index - 1) as usize);
         }
@@ -192,7 +192,7 @@ impl Code {
             chars += x as usize * 256_u32.pow(i as u32) as usize;
         }
         Ok(Self {
-            write_index: (data.len() * 8) as i64,
+            write_index: (data.len() * 8),
             data,
             chars,
             entropy: 0.0,
@@ -200,6 +200,9 @@ impl Code {
         })
     }
 
+    /**
+        Returns one encoded char by value
+    */
     fn get_code(low: u32, high: u32, val: u32, prob: &Probabilities) -> u8 {
         let range = high as u64 - low as u64 + 1;
         for i in 1 as u8..=255 {
