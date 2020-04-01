@@ -22,7 +22,7 @@ struct Probabilities {
 
 impl Probabilities {
     const PRECISION: u64 = 1048576 * 1024; //Select the denominator of probabilities
-    const CYCLE: u64 = 1048576 * 1024;//Select length of cycle
+    const CYCLE: u64 = 64; //Select length of cycle
 
     fn new() -> Self {
         let mut pro = vec![0; 257];
