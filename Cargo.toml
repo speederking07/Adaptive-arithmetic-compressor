@@ -1,5 +1,5 @@
 [package]
-name = "coding_list_2"
+name = "arithmetic_coder"
 version = "0.1.0"
 authors = ["Marek <marekbauer07@gmail.com>"]
 edition = "2018"
